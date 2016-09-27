@@ -22,3 +22,7 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# Vendors
+vendor/*
+!vendor/vendor.json
