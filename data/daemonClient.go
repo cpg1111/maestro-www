@@ -8,12 +8,14 @@ import (
 	"time"
 )
 
+// Client is a client to maestrod
 type Client struct {
 	DaemonAddr     string
 	PollIntervalMS int
 	httpClient     *http.Client
 }
 
+// NewClient returns a pointer to an instance of Client
 func NewClient(daemonAddr string, pollIntrvl int) *Client {
 	return &Client{
 		DaemonAddr:     daemonAddr,
@@ -33,7 +35,7 @@ func (c *Client) projectEndPoint(project string) string {
 
 func (c *Client) singleEndPoint(project, branch string) string {
 	branchEsc := url.QueryEscape(branch)
-	return fmt.Sprintf("%s&branch=%s", c.projectEndPoint(), branchEsc)
+	return fmt.Sprintf("%s&branch=%s", c.projectEndPoint(project), branchEsc)
 }
 
 func (c *Client) get(endpoint string) (chan []byte, chan error) {
@@ -62,7 +64,7 @@ func (c *Client) watch(endpoint string, interrupt chan bool) (chan []byte, chan 
 			res, err := c.get(endpoint)
 			resChan <- <-res
 			errChan <- <-err
-			time.Sleep(c.PollIntervalMS * time.Millisecond)
+			time.Sleep(time.Millisecond * (time.Duration)(c.PollIntervalMS))
 		}
 	}()
 	go func() {
@@ -71,27 +73,32 @@ func (c *Client) watch(endpoint string, interrupt chan bool) (chan []byte, chan 
 	return resChan, errChan
 }
 
+// GetAll gets all states of maestrod
 func (c *Client) GetAll() (chan []byte, chan error) {
 	endpoint := c.stateEndPoint()
 	return c.get(endpoint)
 }
 
+// GetOne gets the state of a particular branch of a project
 func (c *Client) GetOne(project, branch string) (chan []byte, chan error) {
 	endpoint := c.singleEndPoint(project, branch)
 	return c.get(endpoint)
 }
 
+// WatchOne will watch a current build in maestrod
 func (c *Client) WatchOne(project, branch string, interrupt chan bool) (chan []byte, chan error) {
 	endpoint := c.singleEndPoint(project, branch)
-	return c.watch(endpoint)
+	return c.watch(endpoint, interrupt)
 }
 
+// GetProject will get the state of a project in maestrod
 func (c *Client) GetProject(project string) (chan []byte, chan error) {
 	endpoint := c.projectEndPoint(project)
 	return c.get(endpoint)
 }
 
-func (c *Client) WatchProject(project string) (chan []byte, chan error) {
+// WatchProject will watch for builds within a project
+func (c *Client) WatchProject(project string, interrupt chan bool) (chan []byte, chan error) {
 	endpoint := c.projectEndPoint(project)
-	return c.watch(endpoint)
+	return c.watch(endpoint, interrupt)
 }

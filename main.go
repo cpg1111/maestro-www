@@ -8,7 +8,7 @@ import (
 var (
 	flags = map[string]interface{}{
 		"host": flag.String("host", "127.0.0.1", "host for server to bind on"),
-		"port": flag.Int("port", "8080", "port for server to listen on"),
+		"port": flag.Int("port", 8080, "port for server to listen on"),
 		"cert": flag.String("cert-path", "", "path to tls cert"),
 		"key":  flag.String("key-path", "", "path to tls key"),
 	}
@@ -22,7 +22,7 @@ var (
 
 func flagEnvMerge() (opts map[string]interface{}) {
 	for i := range env {
-		if len(env[i]) > 0 {
+		if env[i] != nil {
 			opts[i] = env[i]
 		} else {
 			opts[i] = flags[i]
@@ -32,5 +32,5 @@ func flagEnvMerge() (opts map[string]interface{}) {
 }
 
 func main() {
-	opts := flagEnvMerge()
+	//opts := flagEnvMerge()
 }

@@ -47,9 +47,12 @@ func NewWS(bufferSize int, actions map[string]WSAction) *WS {
 
 // HandleUpgrades handles a HTTP upgrade to a websocket
 func (ws *WS) HandleUpgrades(res http.ResponseWriter, req *http.Request) {
-	conn, connErr := ws.Upgrader.Upgrade(res, req, nil)
+	upgradeHeader := http.Header{}
+	upgradeHeader.Add("Status Code", "101 Switching Protocols")
+	conn, connErr := ws.Upgrader.Upgrade(res, req, upgradeHeader)
 	if connErr != nil {
 		ws.HandleServerError(res, req, connErr)
+		return
 	}
 	ws.Route(conn)
 }
@@ -89,20 +92,24 @@ func (ws *WS) Route(conn *websocket.Conn) {
 		_, msg, msgErr := conn.ReadMessage()
 		if msgErr != nil {
 			ws.HandleWSError(conn, msgErr)
+			break
 		}
 		recvMsg := &wsOuterMessage{}
 		unmarshErr := json.Unmarshal(msg, recvMsg)
 		if unmarshErr != nil {
 			ws.HandleWSError(conn, unmarshErr)
+			break
 		}
 		ws.Logger.Println("MESSAGE : ", recvMsg)
 		if ws.Actions[recvMsg.Action] != nil {
 			actErr := ws.Actions[recvMsg.Action](conn, recvMsg)
 			if actErr != nil {
 				ws.HandleWSError(conn, actErr)
+				break
 			}
 		} else {
 			ws.HandleWSError(conn, errors.New(fmt.Sprintf("action %s does not exist", recvMsg.Action)))
+			break
 		}
 	}
 }
