@@ -26,3 +26,5 @@ _testmain.go
 # Vendors
 vendor/*
 !vendor/vendor.json
+
+**/node_modules/
