@@ -28,3 +28,5 @@ vendor/*
 !vendor/vendor.json
 
 **/node_modules/
+
+**/dist/**/*
