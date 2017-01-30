@@ -48,8 +48,8 @@ b.on('log', gulpUtil.log);
 gulp.task('scripts', bundleScripts);
 
 gulp.task('styles', ()=>{
-    return gulp.src('./styles/**/index.sass')
-        .pipe(sass().on('error', gulpUtil.log))
+    return sass('./styles/**/index.sass')
+        .on('error', gulpUtil.log)
         .pipe(minifyCss())
         .pipe(gulp.dest('./build/styles'));
 });
