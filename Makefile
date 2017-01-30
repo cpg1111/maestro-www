@@ -1,26 +1,29 @@
-.PHONY: all get-deps build lint-go lint-jss lint fmt docker install uninstall
+.PHONY: all clean get-deps build lint-go lint-jss lint fmt docker install uninstall
 
 UNAME_S := $(shell uname -s)
 PKG_MGR := apt-get
 
 all: build
 
+clean:
+	rm -rf ./public/assets/node_modules/ ./public/assets/build/ ./dist/
+
 get-deps:
-	if [ -z `which curl` ]; then
-		${PKG_MGR} install -y curl
+	if [ -z "$(which curl)" ]; then \
+		${PKG_MGR} install -y curl; \
 	fi
-	if [ -z `which npm` ]; then
-		curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-		${PKG_MGR} install -y nodejs
+	if [ -z "$(which npm)" ]; then \
+		curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+		${PKG_MGR} install -y nodejs; \
 	fi
-	if [ -z `which gulp` ]; then
-		npm install -g gulp
+	if [ -z "$(which gulp)" ]; then \
+		npm install -g gulp; \
 	fi
-	if [ -z `which go-bindata` ]; then
-		go get -u github.com/jteeuwen/go-bindata/...
+	if [ -z "$(which go-bindata)" ]; then \
+		go get -u github.com/jteeuwen/go-bindata/...; \
 	fi
-	if [ -z `which glide` ]; then
-		curl https://glide.sh/get | sh
+	if [ -z "$(which glide)" ]; then \
+		curl https://glide.sh/get | sh; \
 	fi
 
 build: get-deps

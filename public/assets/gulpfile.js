@@ -7,7 +7,7 @@ const gulpUtil = require('gulp-util');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const sourcemaps = require('gulp-sourcemaps');
-const sass = require('gulp-sass');
+const sass = require('gulp-ruby-sass');
 const minifyCss = require('gulp-clean-css');
 const htmlLint = require('gulp-html5-lint');
 
@@ -71,4 +71,4 @@ gulp.task('watch-styles', ()=>gulp.watch('./styles/**/*', ['styles']));
 
 gulp.task('watch-templates', ()=>gulp.watch('./templates/**/*', ['templates']));
 
-gulp.tash('watch', ['watch-scripts', 'watch-styles', 'watch-templates']);
+gulp.task('watch', ['watch-scripts', 'watch-styles', 'watch-templates']);
