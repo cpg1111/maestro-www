@@ -10,7 +10,9 @@ class WSClient extends WebSocket {
         this.subscription = null;
     }
     handleDebugErr(){
-        console.log('from WSClient: ');
+        if(window.DEBUG){
+            console.log('from WSClient: ');
+        }
         handleDebugErr.apply(this, arguments);
     }
     onopen(){
@@ -71,3 +73,5 @@ class WSClient extends WebSocket {
         super.close();
     }
 }
+
+export WSClient;
