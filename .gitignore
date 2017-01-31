@@ -30,3 +30,5 @@ vendor/*
 **/node_modules/
 
 **/dist/**/*
+
+*.swp
