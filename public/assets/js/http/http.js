@@ -78,3 +78,5 @@ class HTTPClient {
         return reject(err);
     }
 }
+
+export HTTPClient;
