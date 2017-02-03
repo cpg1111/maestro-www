@@ -5,16 +5,23 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/cpg1111/maestrod/datastore"
+
+	"github.com/cpg1111/maestro-www/auth"
 )
 
 type Server struct {
 	http.Server
 }
 
-func New(cert, key, host string, port int) (*Server, error) {
+// TODO load a config to choose a datastore
+func New(cert, key, host string, port int, dStore datastore.Datastore) (*Server, error) {
 	mux := http.NewServeMux()
 	ws := NewWS(4096, DefaultWSActions)
+	authHandler := auth.New(dStore)
 	mux.HandleFunc("/ws", ws.HandleUpgrades)
+	mux.Handle("/auth", authHandler)
 	srv := &Server{
 		http.Server{
 			Addr:    fmt.Sprintf("%s:%d", host, port),
