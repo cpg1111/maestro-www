@@ -2,3 +2,10 @@ package: github.com/cpg1111/maestro-www
 import:
 - package: github.com/gorilla/websocket
   version: ^1.1.0
+- package: github.com/cpg1111/maestrod
+  version: ^0.1.1
+  subpackages:
+  - datastore
+- package: golang.org/x/crypto
+  subpackages:
+  - bcrypt
