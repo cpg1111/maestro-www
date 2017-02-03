@@ -6,3 +6,6 @@ import:
   version: ^0.1.1
   subpackages:
   - datastore
+- package: golang.org/x/crypto
+  subpackages:
+  - bcrypt

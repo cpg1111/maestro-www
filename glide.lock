@@ -1,5 +1,5 @@
-hash: 925c117ebca93b001fb59c11ffd4a6ff1835bb6a523e54b76feac97f81b99a8b
-updated: 2017-01-30T21:01:22.087429899-05:00
+hash: 583d66a1178d8a11b872ea684afea1823bd2923c9b2a2375f4bb587727678405
+updated: 2017-01-31T20:16:37.225198652-05:00
 imports:
 - name: github.com/cpg1111/maestrod
   version: bc63ed199fafb5010a7aa300e3976833621b4adb
@@ -7,4 +7,8 @@ imports:
   - datastore
 - name: github.com/gorilla/websocket
   version: 3ab3a8b8831546bd18fd182c20687ca853b2bb13
+- name: golang.org/x/crypto
+  version: dc137beb6cce2043eb6b5f223ab8bf51c32459f4
+  subpackages:
+  - bcrypt
 testImports: []
